@@ -25,6 +25,10 @@ if __name__ == '__main__':
             if l == 0:
                 continue
 
+            # Skip empty or "total" rows
+            if row[0].strip() == '':
+                continue
+
             # Some field records are duplicated by SQL Server; skip these
             if row[1].lower() in traversed_fields:
                 continue

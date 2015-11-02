@@ -2,6 +2,7 @@
 
 To import some foreclosure data into a database, we want to perform the following steps, in order:
 
+1. Save the data dictionary/ layout file as a CSV and edit as necessary (make sure header is in top row).
 1. Clean the RealtyTrac data dictionary (`clean_data_dict.py`).
 1. Subset the cleaned data dictionary to just those fields in foreclosure records (`subset_data_dict.py`).
 1. Create the database to hold our foreclosure records.
