@@ -1,0 +1,21 @@
+# Tutorial
+
+To import some foreclosure data into a database, we want to perform the following steps, in order:
+
+1. Clean the RealtyTrac data dictionary (`clean_data_dict.py`).
+1. Subset the cleaned data dictionary to just those fields in foreclosure records (`subset_data_dict.py`).
+1. Create the database to hold our foreclosure records.
+
+## Clean the RealtyTrac Data Dictionary
+
+```sh
+$ python clean_data_dict.py dirty_dict.csv clean_dict.csv
+```
+
+## Subset the Cleaned Dictionary
+
+For example, if we want only "Foreclosure" record fields:
+
+```sh
+$ python subset_data_dict.py clean_dict.csv "Foreclosure" output_dict.csv
+```
