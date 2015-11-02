@@ -19,3 +19,11 @@ For example, if we want only "Foreclosure" record fields:
 ```sh
 $ python subset_data_dict.py clean_dict.csv "Foreclosure" output_dict.csv
 ```
+
+## Create the Database
+
+Create a database `realtytrac` owned by `arthur`:
+
+```sh
+$ .create_db.sh realtytrac arthur
+```
