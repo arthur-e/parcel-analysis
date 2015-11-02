@@ -5,5 +5,9 @@
 # As the index of the field length colum is 4
 FIELDWIDTHS=$(python field_widths.py $1 $2)
 
+# First part parses fixed width; second part strips extra whitespace
+gawk '$1=$1' FIELDWIDTHS="$FIELDWIDTHS" OFS=";" $3 | sed 's/ *; */;/g'
+
+# For quoted data:
 # First part parses fixed width; second part quotes fields; third part strips extra whitespace
-gawk '$1=$1' FIELDWIDTHS="$FIELDWIDTHS" OFS=";" $3 | sed -e 's/^\|$/"/g' -e 's/;/","/g' | sed 's/ *\",\" */\",\"/g'
+# gawk '$1=$1' FIELDWIDTHS="$FIELDWIDTHS" OFS=";" $3 | sed -e 's/^\|$/"/g' -e 's/;/","/g' | sed 's/ *\",\" */\",\"/g'

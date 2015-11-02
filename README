@@ -6,6 +6,8 @@ To import some foreclosure data into a database, we want to perform the followin
 1. Clean the RealtyTrac data dictionary (`clean_data_dict.py`).
 1. Subset the cleaned data dictionary to just those fields in foreclosure records (`subset_data_dict.py`).
 1. Create the database to hold our foreclosure records.
+1. Convert the fixed-width files to comma-separated variable (CSV) files to be read.
+1. Copy data to the table.
 
 ## Clean the RealtyTrac Data Dictionary
 
@@ -27,4 +29,21 @@ Create a database `realtytrac` owned by `arthur`:
 
 ```sh
 $ . create_db.sh realtytrac arthur
+```
+
+## Convert Fixed-Width Files to CSV
+
+Where the field length column is at index 4:
+
+```sh
+$ . convert_fixed_width_to_csv.sh data_dict.csv 4 fixed_width_data.txt
+```
+
+## Copy Data to Database Table
+
+For example, copying data to the `record` (Recorder) table:
+
+```sh
+DBNAME=realtytrac
+sudo -u postgres psql -d $DBNAME -c "COPY record FROM 'test.csv' WITH DELIMITER ';' NULL AS ''"
 ```

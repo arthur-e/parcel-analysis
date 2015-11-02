@@ -22,7 +22,10 @@ if __name__ == '__main__':
     with open(sys.argv[2], 'r') as data_dict:
         reader = csv.reader(data_dict)
         for l, row in enumerate(reader):
+            nullable = 'NOT NULL'
+
             if l == 0:
+                header = row
                 continue
 
             # Skip empty or "total" rows
@@ -37,25 +40,33 @@ if __name__ == '__main__':
             if row[4].strip() == '':
                 continue
 
+            # Null values allowed?
+            if row[header.index('Empty Values')] == 'Yes':
+                nullable = 'NULL'
+
+            # The "filler" field is always allowed to be null
+            if row[1].lower() == 'filler':
+                nullable = 'NULL'
+
             # Concatenate the "Field Information" and "ANSI Data Type" and "Precision"
             if row[2].strip() in ('character', 'character varying'):
-                script.append('  %s%s(%d),' % (row[1].lower().ljust(padding),
-                    row[2].strip(), int(row[4])))
+                script.append('  %s%s(%d) %s,' % (row[1].lower().ljust(padding),
+                    row[2].strip(), int(row[4]), nullable))
 
             elif row[2].strip().lower() == 'no equivalent':
                 # TODO Create a field data type whitelist and map non-standard types
                 # Use the "SQL Server Data Type" instead
                 if row[3].strip() == 'tinyint':
-                    script.append('  %s%s,' % (row[1].lower().ljust(padding),
-                        'smallint'))
+                    script.append('  %s%s %s,' % (row[1].lower().ljust(padding),
+                        'smallint', nullable))
 
                 else:
-                    script.append('  %s%s,' % (row[1].lower().ljust(padding),
-                        row[3].strip()))
+                    script.append('  %s%s %s,' % (row[1].lower().ljust(padding),
+                        row[3].strip(), nullable))
 
             else:
-                script.append('  %s%s,' % (row[1].lower().ljust(padding),
-                    row[2].strip()))
+                script.append('  %s%s %s,' % (row[1].lower().ljust(padding),
+                    row[2].strip(), nullable))
 
             traversed_fields.append(row[1].lower())
 
