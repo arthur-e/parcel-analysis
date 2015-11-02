@@ -20,10 +20,10 @@ For example, if we want only "Foreclosure" record fields:
 $ python subset_data_dict.py clean_dict.csv "Foreclosure" output_dict.csv
 ```
 
-## Create the Database
+## Create the Database and Schema
 
 Create a database `realtytrac` owned by `arthur`:
 
 ```sh
-$ .create_db.sh realtytrac arthur
+$ . create_db.sh realtytrac arthur
 ```
