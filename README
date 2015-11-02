@@ -31,6 +31,12 @@ Create a database `realtytrac` owned by `arthur`:
 $ . create_db.sh realtytrac arthur
 ```
 
+Then, create the `record` (Recorder) table, where `sr_unique_id` is the primary key.
+
+```sh
+$ python create_from_data_dict.py "record" data_dict.csv "sr_unique_id" | sudo -u postgres psql -d $DBNAME -f -
+```
+
 ## Convert Fixed-Width Files to CSV
 
 Where the field length column is at index 4:
@@ -45,5 +51,5 @@ For example, copying data to the `record` (Recorder) table:
 
 ```sh
 DBNAME=realtytrac
-sudo -u postgres psql -d $DBNAME -c "COPY record FROM 'test.csv' WITH DELIMITER ';' NULL AS ''"
+sudo -u postgres psql -d $DBNAME -c "COPY record FROM 'test.csv' WITH DELIMITER '>' NULL AS ''"
 ```
