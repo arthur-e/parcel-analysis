@@ -1,21 +1,26 @@
-# Tutorial
+Workflow
+========
 
 To import some foreclosure data into a database, we want to perform the following steps, in order:
 
 1. Save the data dictionary/ layout file as a CSV and edit as necessary (make sure header is in top row).
-1. Clean the RealtyTrac data dictionary (`clean_data_dict.py`).
-1. Subset the cleaned data dictionary to just those fields in foreclosure records (`subset_data_dict.py`).
-1. Create the database to hold our foreclosure records.
-1. Convert the fixed-width files to comma-separated variable (CSV) files to be read.
-1. Copy data to the table.
+2. Clean the RealtyTrac data dictionary (`clean_data_dict.py`).
+3. Subset the cleaned data dictionary to just those fields in foreclosure records (`subset_data_dict.py`).
+4. Create the database to hold our foreclosure records.
+5. Convert the fixed-width files to comma-separated variable (CSV) files to be read.
+6. Copy data to the table.
 
-## Clean the RealtyTrac Data Dictionary
+Steps 1 through 3 probably only need to be done for the Assessor and Foreclosure records as the Recorder data dictionary ("layout" file) is separate and in good condition.
+
+Clean the RealtyTrac Data Dictionary
+------------------------------------
 
 ```sh
 $ python clean_data_dict.py dirty_dict.csv clean_dict.csv
 ```
 
-## Subset the Cleaned Dictionary
+Subset the Cleaned Dictionary
+-----------------------------
 
 For example, if we want only "Foreclosure" record fields:
 
@@ -23,7 +28,8 @@ For example, if we want only "Foreclosure" record fields:
 $ python subset_data_dict.py clean_dict.csv "Foreclosure" output_dict.csv
 ```
 
-## Create the Database and Schema
+Create the Database and Schema
+------------------------------
 
 Create a database `realtytrac` owned by `arthur`:
 
@@ -37,7 +43,8 @@ Then, create the `record` (Recorder) table, where `sr_unique_id` is the primary 
 $ python create_from_data_dict.py "record" data_dict.csv "sr_unique_id" | sudo -u postgres psql -d $DBNAME -f -
 ```
 
-## Convert Fixed-Width Files to CSV
+Convert Fixed-Width Files to CSV
+--------------------------------
 
 Where the field length column is at index 4:
 
@@ -45,7 +52,8 @@ Where the field length column is at index 4:
 $ . convert_fixed_width_to_csv.sh data_dict.csv 4 fixed_width_data.txt
 ```
 
-## Copy Data to Database Table
+Copy Data to Database Table
+---------------------------
 
 For example, copying data to the `record` (Recorder) table:
 
