@@ -1,22 +1,30 @@
+Notes
+=====
+
+GNU Awk (overrides `awk` but is also called `gawk`) is required for this but it may not be installed already.
+On Debian systems (including the Ubuntu distributions) it is likely not available; try:
+
+```sh
+sudo apt-get install gawk
+```
+
+Changes to RealtyTrac Metadata
+==============================
+
+I had to make some changes to the metadata/ layout files provided because there were some elements that simply weren't true (or couldn't be true):
+
+* In the Assessor layout file, after converting it to a CSV, I changed the "Empty Value" field for the "process_id" field from "No" to "Yes" because, in fact, there are NULL values in the "process_id" field within the Assessor data.
+
 Workflow
 ========
 
 To import some foreclosure data into a database, we want to perform the following steps, in order:
 
-1. Save the data dictionary/ layout file as a CSV and edit as necessary (make sure header is in top row).
+1. Save the data dictionary/ layout file as a CSV and edit as necessary. **You must make sure that the header is in the first row and there are no extra rows (every row is a field description).**
 2. **If necessary,** clean the RealtyTrac data dictionary (`clean_data_dict.py`).
 3. Create the database to hold our foreclosure records.
 4. Convert the fixed-width files to comma-separated variable (CSV) files to be read.
 5. Copy data to the table.
-
-Steps 1 through 3 probably only need to be done for the Assessor and Foreclosure records as the Recorder data dictionary ("layout" file) is separate and in good condition.
-
-Clean the RealtyTrac Data Dictionary
-------------------------------------
-
-```sh
-$ python clean_data_dict.py dirty_dict.csv clean_dict.csv
-```
 
 Create the Database and Schema
 ------------------------------
@@ -36,11 +44,18 @@ $ python create_from_data_dict.py "record" data_dict.csv "sr_unique_id" | sudo -
 Convert Fixed-Width Files to CSV
 --------------------------------
 
-Where the field length column is at index 4:
+The length column is always the fourth column, so leave the index at "4" as in the following example.
+Where the field length column is at index 4 and we want to use the ">" character as a delimiter:
 
 ```sh
-$ . convert_fixed_width_to_csv.sh data_dict.csv 4 fixed_width_data.txt
+$ . convert_fixed_width_to_csv.sh data_dict.csv 4 ">" fixed_width_data.txt > output.csv
 ```
+
+Because the fixed-width data contain so many different characters, I found it necessary to use the following delimiters with each data file:
+
+* Recorder data: The right angle-bracket ">" character
+* Assessor data: The vertical bar "|" character
+* Foreclosure data: The vertical bar "|" character
 
 Copy Data to Database Table
 ---------------------------
@@ -49,5 +64,6 @@ For example, copying data to the `record` (Recorder) table:
 
 ```sh
 DBNAME=realtytrac
-sudo -u postgres psql -d $DBNAME -c "COPY record FROM 'test.csv' WITH DELIMITER '>' NULL AS ''"
+TABLE_NAME=record
+sudo -u postgres psql -d $DBNAME -c "COPY $TABLE_NAME FROM 'test.csv' WITH DELIMITER '>' NULL AS ''"
 ```

@@ -11,7 +11,7 @@ RECORDER_DATA_DICT=/home/arthur/Downloads/RealtyTrac/REALTYTRAC_DLP_3.0_Recorder
 python create_from_data_dict.py "record" $RECORDER_DATA_DICT "sr_unique_id" | sudo -u postgres psql -d $DBNAME -f -
 
 # Create the assessment (Assessor Record) table
-python create_from_data_dict.py "assessment" $ASSESSOR_DATA_DICT "sr_unique_id" | sudo -u postgres psql -d $DBNAME -f -
+python create_from_data_dict.py "assessment" $ASSESSOR_DATA_DICT | sudo -u postgres psql -d $DBNAME -f -
 
 # Create the foreclosure table
 python create_from_data_dict.py "foreclosure" $FORECLOSURE_DATA_DICT "unique_id_notice" | sudo -u postgres psql -d $DBNAME -f -
