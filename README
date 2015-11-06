@@ -4,11 +4,10 @@ Workflow
 To import some foreclosure data into a database, we want to perform the following steps, in order:
 
 1. Save the data dictionary/ layout file as a CSV and edit as necessary (make sure header is in top row).
-2. Clean the RealtyTrac data dictionary (`clean_data_dict.py`).
-3. Subset the cleaned data dictionary to just those fields in foreclosure records (`subset_data_dict.py`).
-4. Create the database to hold our foreclosure records.
-5. Convert the fixed-width files to comma-separated variable (CSV) files to be read.
-6. Copy data to the table.
+2. **If necessary,** clean the RealtyTrac data dictionary (`clean_data_dict.py`).
+3. Create the database to hold our foreclosure records.
+4. Convert the fixed-width files to comma-separated variable (CSV) files to be read.
+5. Copy data to the table.
 
 Steps 1 through 3 probably only need to be done for the Assessor and Foreclosure records as the Recorder data dictionary ("layout" file) is separate and in good condition.
 
@@ -17,15 +16,6 @@ Clean the RealtyTrac Data Dictionary
 
 ```sh
 $ python clean_data_dict.py dirty_dict.csv clean_dict.csv
-```
-
-Subset the Cleaned Dictionary
------------------------------
-
-For example, if we want only "Foreclosure" record fields:
-
-```sh
-$ python subset_data_dict.py clean_dict.csv "Foreclosure" output_dict.csv
 ```
 
 Create the Database and Schema
