@@ -53,6 +53,12 @@ if __name__ == '__main__':
                 inp = '  %s%s(%d) %s,' % (row[1].lower().ljust(padding),
                     row[2].strip(), int(row[4]), nullable)
 
+            # Fields for a dollar amount ("AMT") or a principal are specified as integer type but should not be
+            elif row[1].find('_AMT') > 0 or row[1].find('AMOUNT') > 0 or row[1].find('_PRINCIPAL') > 0:
+                inp = '  %s%s %s,' % (row[1].lower().ljust(padding), 'numeric',
+                    nullable)
+
+            # No ANSI equivalent for this SQL Server data type
             elif row[2].strip().lower() == 'no equivalent':
                 # TODO Create a field data type whitelist and map non-standard types
                 # Use the "SQL Server Data Type" instead
@@ -72,11 +78,12 @@ if __name__ == '__main__':
             script.append(inp)
             traversed_fields.append(row[1].lower())
 
-    # Remove any trailing comma from the last field descriptor
-    script[-1] = script[-1].replace(',', '', 1)
-
     if len(sys.argv) > 3:
         script.append('  PRIMARY KEY(%s)' % sys.argv[3])
+
+    else:
+        # Remove any trailing comma from the last field descriptor
+        script[-1] = script[-1].replace(',', '', 1)
 
     script.append(');\n')
     sys.stdout.write('\n'.join(script))

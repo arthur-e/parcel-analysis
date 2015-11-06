@@ -8,12 +8,14 @@ On Debian systems (including the Ubuntu distributions) it is likely not availabl
 sudo apt-get install gawk
 ```
 
-Changes to RealtyTrac Metadata
-==============================
+Issues with RealtyTrac Metadata
+===============================
 
-I had to make some changes to the metadata/ layout files provided because there were some elements that simply weren't true (or couldn't be true):
+In the metadata/ layout files provided there were some elements that simply weren't true (or couldn't be true):
 
-* In the Assessor layout file, after converting it to a CSV, I changed the "Empty Value" field for the "process_id" field from "No" to "Yes" because, in fact, there are NULL values in the "process_id" field within the Assessor data.
+* In the Assessor layout file, after converting it to a CSV, I changed the "Empty Value" field for the `process_id` field from "No" to "Yes" because, in fact, there are NULL values in the `process_id` field within the Assessor data.
+* The `sr_unique_id` field is **not** unique in the Assessor data and therefore cannot be used as a primary key.
+* In the Foreclosure layout file, after converting it to a CSV, I changed the "Empty Value" field for multiple fields from "No" to "Yes" because, in fact, there are NULL values in the `trustee_unit_nbr` and `fd_beneficiary_unit_nbr` and `parcel_nbr_raw` fields.
 
 Workflow
 ========
