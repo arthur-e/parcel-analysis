@@ -8,6 +8,8 @@ On Debian systems (including the Ubuntu distributions) it is likely not availabl
 sudo apt-get install gawk
 ```
 
+**You can quickly get up-and-running with the script `setup.sh` after setting the variables defined within.**
+
 Issues with RealtyTrac Metadata
 ===============================
 
