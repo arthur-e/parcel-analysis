@@ -19,6 +19,21 @@ In the metadata/ layout files provided there were some elements that simply were
 * The `sr_unique_id` field is **not** unique in the Assessor data and therefore cannot be used as a primary key.
 * In the Foreclosure layout file, after converting it to a CSV, I changed the "Empty Value" field for multiple fields from "No" to "Yes" because, in fact, there are NULL values in the `trustee_unit_nbr` and `fd_beneficiary_unit_nbr` and `parcel_nbr_raw` fields.
 
+Primary Keys
+------------
+
+It's not clear what RealtyTrac intended, but here are some possible primary keys (unique for every record):
+
+    Assessor data:
+        sa_property_id ("Unique primary key identifier assigned to a property")
+
+    Foreclosure data:
+        unique_id_notice ("Unique transactional identifier for a recorded pre-Forecelosure Notice.")
+
+    Recorder data:
+        sr_property_id ("Joined to Assessor data to merge Assessor and Recorder data. Internal identification number assigned to every property") -- NOT UNIQUE
+        sr_unique_id ("Unique  ID assigned to the original loan transaction for an Assignment record.")
+
 Workflow
 ========
 

@@ -6,8 +6,11 @@
 # As the index of the field length colum is 4
 FIELDWIDTHS=$(python field_widths.py $1 $2)
 
-# First part parses fixed width; second part strips extra whitespace; third part removes backslashes...
-gawk '$1=$1' FIELDWIDTHS="$FIELDWIDTHS" OFS="$3" $4 | sed "s/ *$3 */$3/g" | sed 's|\\||g'
+# First part parses fixed width; second part strips extra whitespace; third part removes backslashes; fourth part removes non-ASCII characters...
+gawk '$1=$1' FIELDWIDTHS="$FIELDWIDTHS" OFS="$3" $4 | sed "s/ *$3 */$3/g" | sed 's|\\||g' | LANG=C sed 's/[^\x00-\x7F]//g'
+
+# NOTE: Alternatively, use the following to filter non-ASCII characters:
+#   LANG=C sed 's/[\d128-\d255]//g'
 
 # For quoted data (and semicolon delimiters):
 # First part parses fixed width; second part quotes fields; third part strips extra whitespace
