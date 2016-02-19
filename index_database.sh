@@ -6,6 +6,8 @@ DBNAME=realtytrac
 # Indexes columns of record table
 # Indexes `sr_property_id`
 sudo -u postgres psql -d $DBNAME -c "CREATE INDEX idx_record_sr_property_id ON record USING hash (sr_property_id);"
+sudo -u postgres psql -d $DBNAME -c "CREATE INDEX idx_record_sr_date_transfer ON record USING btree (sr_date_transfer);"
+sudo -u postgres psql -d $DBNAME -c "CREATE INDEX idx_record_sr_date_filing ON record USING btree (sr_date_filing);"
 
 # Indexes columns of foreclosure table
 # Indexes `sa_property_id` for faster lookups on Assessor property ID
