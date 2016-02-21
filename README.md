@@ -54,10 +54,10 @@ Create a database `realtytrac` owned by `arthur`:
 $ . create_db.sh realtytrac arthur
 ```
 
-Then, create the `transaction` (Recorder) table, where `sr_unique_id` is the primary key.
+Then, create the `transactions` (Recorder) table, where `sr_unique_id` is the primary key.
 
 ```sh
-$ python create_from_data_dict.py "transaction" data_dict.csv "sr_unique_id" | sudo -u postgres psql -d $DBNAME -f -
+$ python create_from_data_dict.py "transactions" data_dict.csv "sr_unique_id" | sudo -u postgres psql -d $DBNAME -f -
 ```
 
 Convert Fixed-Width Files to CSV
@@ -79,10 +79,10 @@ Because the fixed-width data contain so many different characters, I found it ne
 Copy Data to Database Table
 ---------------------------
 
-For example, copying data to the `transaction` (Recorder) table:
+For example, copying data to the `transactions` (Recorder) table:
 
 ```sh
 DBNAME=realtytrac
-TABLE_NAME=transaction
+TABLE_NAME=transactions
 sudo -u postgres psql -d $DBNAME -c "COPY $TABLE_NAME FROM 'test.csv' WITH DELIMITER '>' NULL AS ''"
 ```
