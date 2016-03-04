@@ -1,5 +1,4 @@
 ﻿-- Summarizes home prices in a transfer by year and by block group.
---CREATE OR REPLACE VIEW transactions_by_block_group AS
 SELECT bg.geoid10 AS fips, tr.transfer_year,
        min(tr.sr_val_transfer) AS min_val_transfer,
        max(tr.sr_val_transfer) AS max_val_transfer,
