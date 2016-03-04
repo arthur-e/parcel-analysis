@@ -4,6 +4,8 @@
 
 --DROP TABLE geocoded;
 CREATE TABLE geocoded (
+   x2		decimal,
+   y2		decimal,
    status	varchar(1),
    score	decimal,
    match_type	varchar(1),
@@ -18,7 +20,10 @@ CREATE TABLE geocoded (
    match_info	text,
    source	varchar(255),
    raw_addr	varchar(255))
---COPY geocoded FROM '/home/arthur/Desktop/geocoding_first_run.csv' WITH DELIMITER ',' NULL AS '' CSV HEADER;
+--COPY geocoded FROM '/home/arthur/Desktop/geocoding_first_pass.csv' WITH DELIMITER ',' NULL AS '' CSV HEADER;
+--ALTER TABLE geocoded DROP COLUMN x2;
+--ALTER TABLE geocoded DROP COLUMN y2;
+--VACUUM ANALYZE geocoded;
 
 --Second run data:
 --X,Y,Status,Score,Match_type,Match_addr,Side,Ref_ID,X,Y,User_fld,Addr_type,ARC_Single_Line_Input,property_id,banana,rawaddress
@@ -43,3 +48,6 @@ CREATE TABLE geocoded_extra (
    match_info	text,
    raw_addr	varchar(255))
 --COPY geocoded_extra FROM '/home/arthur/Desktop/geocoding_second_pass.csv' WITH DELIMITER ',' NULL AS '' CSV HEADER;
+--ALTER TABLE geocoded_extra DROP COLUMN x2;
+--ALTER TABLE geocoded_extra DROP COLUMN y2;
+--VACUUM ANALYZE geocoded_extra;
