@@ -1,4 +1,5 @@
-﻿SELECT sr_property_id, score, 
+﻿-- Creates a temporary, spatially explicit table of adjusted prices (up to year 2010 ONLY).
+SELECT sr_property_id, score, 
        sr_val_transfer * cpi.adjustment AS sr_val_transfer_adj, 
        sr_tax_transfer * cpi.adjustment AS sr_tax_transfer_adj, 
        sr_full_part_code, 
