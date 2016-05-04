@@ -86,3 +86,18 @@ DBNAME=realtytrac
 TABLE_NAME=transactions
 sudo -u postgres psql -d $DBNAME -c "COPY $TABLE_NAME FROM 'test.csv' WITH DELIMITER '>' NULL AS ''"
 ```
+
+Notes on Datasets
+=================
+
+Assessor's Tables
+-----------------
+
+* `sa_parcel_nbr_change_yr` ("Indicates the year in which the most recent parcel conversion took place."); this ranges wildly from 2001 to 2015 with over 1.2 million properties assigned a year of 0. Some years, like 2004, have 6 properties while others, like 2008, have over 490,000.
+* `sa_yr_blt` ("Year in which the primary structure was built on the property")
+* `sa_yr_blt_effect` ("Year in which 'permitted' major improvements were made to the property")
+* `sa_condition_code` ("Code indicating the state/condition of a particular property"); unfortunately, it is blank for every record.
+* `sa_architecture_code` ("Indicates the architectural style of the structure."); it is blank (equal to "0") for almost 98% of the records.
+* `sa_construction_code` ("Indicates the material used in the construction of the framework for the structure on the  property."); blank for about 96% of the records.
+* `sa_patio_porch_code` ("Indicates the presence or type of patio or porch."); non-null for every record, but there is no code for "not present" so it's unclear what to make of this.
+* `sa_pool_code` ("Indicates if there is a pool on the property and/or pool construction material."); blank for about 98% of the records, **which should indicate the property does not have a pool.**
