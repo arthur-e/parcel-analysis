@@ -1,4 +1,5 @@
 ﻿SELECT tc.geoid10 AS fips,
+       median(a.year_built) AS year_built_median,
        avg(a.lot_size_sqft) AS lot_size_sqft_mean, 
        median(a.lot_size_sqft) AS lot_size_sqft_median, 
        stddev(a.lot_size_sqft) AS lot_size_sqft_sd,
