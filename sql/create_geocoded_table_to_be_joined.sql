@@ -20,7 +20,7 @@ CREATE TABLE geocoded (
    match_info	text,
    source	varchar(255),
    raw_addr	varchar(255))
---COPY geocoded FROM '/home/arthur/Desktop/geocoding_first_pass.csv' WITH DELIMITER ',' NULL AS '' CSV HEADER;
+--COPY geocoded FROM '/home/arthur/Downloads/RT_geocoding/rt_geocoded_addr.csv' WITH DELIMITER ',' NULL AS '' CSV HEADER;
 --ALTER TABLE geocoded DROP COLUMN x2;
 --ALTER TABLE geocoded DROP COLUMN y2;
 --VACUUM ANALYZE geocoded;
@@ -47,7 +47,7 @@ CREATE TABLE geocoded_extra (
    property_id	integer,
    match_info	text,
    raw_addr	varchar(255))
---COPY geocoded_extra FROM '/home/arthur/Desktop/geocoding_second_pass.csv' WITH DELIMITER ',' NULL AS '' CSV HEADER;
+--COPY geocoded_extra FROM '/home/arthur/Downloads/RT_geocoding/rt_geocoded_addr_extra.csv' WITH DELIMITER ',' NULL AS '' CSV HEADER;
 --ALTER TABLE geocoded_extra DROP COLUMN x2;
 --ALTER TABLE geocoded_extra DROP COLUMN y2;
 --VACUUM ANALYZE geocoded_extra;
