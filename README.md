@@ -10,6 +10,11 @@ sudo apt-get install gawk
 
 **You can quickly get up-and-running with the script `setup.sh` after setting the variables defined within.**
 
+Useful Fields
+-------------
+
+- In the Assessor file, the `use_code_std` field is populated for most of the records and describes the type of property. Those codes beginning with an "R" are residential properties; "RSFR" properties are single-family home properties.
+
 Issues with RealtyTrac Metadata
 ===============================
 
