@@ -14,3 +14,14 @@ CREATE TABLE cpi_u_housing_2010 (
 );
 
 COPY cpi_u_housing_2010 FROM '/usr/local/dev/parcel-analysis/docs/inflation_adjustment_to_2010_dollars_by_CPI-U_housing.csv' WITH HEADER CSV;
+
+CREATE TABLE cpi_u_housing_monthly_2010 (
+  date date,
+  key integer PRIMARY KEY,
+  year integer,
+  month integer,
+  cpi decimal,
+  adjustment decimal
+);
+
+COPY cpi_u_housing_monthly_2010 FROM '/usr/local/dev/parcel-analysis/docs/inflation_adjustment_to_2010_dollars_monthly_by_CPI-U_housing.csv' WITH HEADER CSV;
