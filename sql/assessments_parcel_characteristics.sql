@@ -1,5 +1,6 @@
 ﻿CREATE OR REPLACE VIEW assessments_parcel_characteristics AS
 SELECT sa_property_id, 
+       use_code_std, 
        sa_lotsize AS lot_size_sqft, 
        sa_bldg_sqft,
        sa_sqft_assr_tot AS built_area_sqft,
