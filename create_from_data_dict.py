@@ -14,6 +14,8 @@ $ python create_from_data_dict.py tablename data_dict.csv primary_key_fieldname
 import csv
 import sys
 
+PRECISION_FIELD_IDX = 4 # Column index of the precision field
+
 if __name__ == '__main__':
     script = ['CREATE TABLE %s (' % sys.argv[1]]
     padding = 30
@@ -37,7 +39,7 @@ if __name__ == '__main__':
                 continue
 
             # If the Precision field is empty, this is a "FILLER" field
-            if row[4].strip() == '':
+            if row[PRECISION_FIELD_IDX].strip() == '':
                 continue
 
             # Null values allowed?
