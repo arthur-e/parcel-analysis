@@ -15,6 +15,14 @@ Useful Fields
 
 - In the Assessor file, the `use_code_std` field is populated for most of the records and describes the type of property. Those codes beginning with an "R" are residential properties; "RSFR" properties are single-family home properties.
 
+| Dataset  | Field Name          | Coverage
+|----------|---------------------|-----------------
+| Recorder | sr_deed_type        | 6807901  (96.5%)
+| Recorder | sr_doc_type         | 6777071  (96.0%)
+| Recorder | sr_tran_type        | 7056997 (100.0%)
+| Recorder | sr_arms_length_flag | 1492356  (21.1%)
+| Recorder | sr_quitclaim        | 7056997 (100.0%)
+
 Issues with RealtyTrac Metadata
 ===============================
 
