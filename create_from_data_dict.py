@@ -16,12 +16,8 @@ import sys
 
 PRECISION_FIELD_IDX = 4 # Column index of the precision field
 
-if __name__ == '__main__':
-    script = ['CREATE TABLE %s (' % sys.argv[1]]
-    padding = 30
-    traversed_fields = []
-
-    with open(sys.argv[2], 'r') as data_dict:
+def main(path, pk_field):
+    with open(path, 'r') as data_dict:
         reader = csv.reader(data_dict)
         for l, row in enumerate(reader):
             nullable = 'NOT NULL'
@@ -81,11 +77,21 @@ if __name__ == '__main__':
             traversed_fields.append(row[1].lower())
 
     if len(sys.argv) > 3:
-        script.append('  PRIMARY KEY(%s)' % sys.argv[3])
+        script.append('  PRIMARY KEY(%s)' % pk_field)
 
     else:
         # Remove any trailing comma from the last field descriptor
         script[-1] = script[-1].replace(',', '', 1)
 
+    return script
+
+
+if __name__ == '__main__':
+    script = ['CREATE TABLE %s (' % sys.argv[1]]
+    padding = 30
+    traversed_fields = []
+
+    # Unpack arguments
+    script = main(*sys.argv[2:4])
     script.append(');\n')
     sys.stdout.write('\n'.join(script))
