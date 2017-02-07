@@ -58,6 +58,6 @@ if [ "$cont" = "Y" ]; then
     done
 
     # echo "Vacuuming tables..."
-    sudo -u postgres psql -d $DBNAME -c "VACUUM ANALYZE transactions;"
-    sudo -u postgres psql -d $DBNAME -c "VACUUM ANALYZE assessments;"
+    # sudo -u postgres psql -d $DBNAME -c "VACUUM ANALYZE transactions;"
+    # sudo -u postgres psql -d $DBNAME -c "VACUUM ANALYZE assessments;"
 fi
