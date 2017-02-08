@@ -3,7 +3,18 @@ Specifically includes support for:
 
 - Conversion from fixed width to delimited (e.g., CSV) format;
 - Creation of a relational database table (PostgreSQL) from a layout file;
+- Inflation adjustment of home sales and other dollar amounts (from CPI-U for housing, 1982-2015);
 - SQL scripts for some analysis, geocoding of transactions, assessments, and foreclosures;
+
+Much of the scripts assume a couple of working objectives because they were developed as part of an applied research project.
+I have no intention of changing these any time soon but will consider any pull requests that improve/ generalize this work.
+If you're working in a different study area, the intent is that this repo is, at the least, a great place to get inspired/ up-to-speed on using these data.
+By subfolder:
+
+- `DataQuick/` - Assumes working in Los Angeles MSA
+- `RealtyTrac/` - Assumes working in Detroit-Flint-Ann Arbor CSA
+
+**Disclaimer: No actual real estate data are included in this repository as this would violate data license agreements.**
 
 Dependencies
 ============
