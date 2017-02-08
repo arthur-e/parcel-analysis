@@ -28,7 +28,7 @@ sudo -u postgres psql -h localhost -d $DBNAME -c "VACUUM ANALYZE census2000_trac
 shp2pgsql -s 26911 -I $GIS_DIR/LosAngeles/census_tracts_2010_utm11n.shp public.census2010_tracts | sudo -u postgres psql -h localhost -d $DBNAME
 sudo -u postgres psql -h localhost -d $DBNAME -c "VACUUM ANALYZE census2010_tracts (geom);"
 
-read -n 1 -p "Inflate RealtyTrac data and insert into database? [Y/n] " cont
+read -n 1 -p "Inflate DataQuick data and insert into database? [Y/n] " cont
 echo ""
 if [ "$cont" = "Y" ]; then
     echo "Inflating data..."

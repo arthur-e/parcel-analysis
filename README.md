@@ -1,5 +1,12 @@
-Notes
-=====
+Contains scripts for working with fixed-width real estate data, including deed sales, tax assessor's records, and foreclosure records, as commonly purchased from vendors such as Data Quick, RealtyTrac, and Attom Data Solutions.
+Specifically includes support for:
+
+- Conversion from fixed width to delimited (e.g., CSV) format;
+- Creation of a relational database table (PostgreSQL) from a layout file;
+- SQL scripts for some analysis, geocoding of transactions, assessments, and foreclosures;
+
+Dependencies
+============
 
 GNU Awk (overrides `awk` but is also called `gawk`) is required for this but it may not be installed already.
 On Debian systems (including the Ubuntu distributions) it is likely not available; try:
@@ -9,19 +16,6 @@ sudo apt-get install gawk
 ```
 
 **You can quickly get up-and-running with the script `setup.sh` after setting the variables defined within.**
-
-Useful Fields
--------------
-
-- In the Assessor file, the `use_code_std` field is populated for most of the records and describes the type of property. Those codes beginning with an "R" are residential properties; "RSFR" properties are single-family home properties.
-
-| Dataset  | Field Name          | Coverage
-|----------|---------------------|-----------------
-| Recorder | sr_deed_type        | 6807901  (96.5%)
-| Recorder | sr_doc_type         | 6777071  (96.0%)
-| Recorder | sr_tran_type        | 7056997 (100.0%)
-| Recorder | sr_arms_length_flag | 1492356  (21.1%)
-| Recorder | sr_quitclaim        | 7056997 (100.0%)
 
 Issues with RealtyTrac Metadata
 ===============================
@@ -102,6 +96,21 @@ sudo -u postgres psql -d $DBNAME -c "COPY $TABLE_NAME FROM 'test.csv' WITH DELIM
 
 Notes on Datasets
 =================
+
+Useful Fields
+-------------
+
+- In the Assessor file, the `use_code_std` field is populated for most of the records and describes the type of property. Those codes beginning with an "R" are residential properties; "RSFR" properties are single-family home properties.
+
+Here's an example of field coverage for select fields from the Detroit Metropolitan Statistical Area:
+
+| Dataset  | Field Name          | Coverage
+|----------|---------------------|-----------------
+| Recorder | sr_deed_type        |  96.5%
+| Recorder | sr_doc_type         |  96.0%
+| Recorder | sr_tran_type        | 100.0%
+| Recorder | sr_arms_length_flag |  21.1%
+| Recorder | sr_quitclaim        | 100.0%
 
 Assessor's Tables
 -----------------

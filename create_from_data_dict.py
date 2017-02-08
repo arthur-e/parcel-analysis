@@ -88,7 +88,7 @@ def main(path, pk_field):
 
 if __name__ == '__main__':
     script = ['CREATE TABLE %s (' % sys.argv[1]]
-    padding = 30
+    padding = int(sys.argv[4]) if len(sys.argv) > 4 else 30
     traversed_fields = []
 
     # Unpack arguments
