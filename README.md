@@ -100,7 +100,7 @@ Copy Data to Database Table
 For example, copying data to the `transactions` (Recorder) table:
 
 ```sh
-DBNAME=realtytrac
+DBNAME=detroit
 TABLE_NAME=transactions
 sudo -u postgres psql -d $DBNAME -c "COPY $TABLE_NAME FROM 'test.csv' WITH DELIMITER '>' NULL AS ''"
 ```

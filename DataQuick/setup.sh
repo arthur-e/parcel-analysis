@@ -14,19 +14,26 @@ python create_from_data_dict.py "transactions" $RECORDER_DATA_DICT "sr_unique_id
 # Create the assessment (Assessor Record) table
 python create_from_data_dict.py "assessments" $ASSESSOR_DATA_DICT "sa_property_id" | sudo -u postgres psql -d $DBNAME -f -
 
-# Insert 2000 Census geometries: Downloaded from <https://www.census.gov/geo/maps-data/data/cbf/cbf_tracts.html>
-# unzip ~/Downloads/tr06_d00_shp.zip -d ~/Downloads
-# ogr2ogr -f "ESRI Shapefile" -where "COUNTY IN ('037', '059', '065', '071', '111')" -s_srs "EPSG:4269" -t_srs "EPSG:26911" $GIS_DIR/LosAngeles/census_tracts_2000_utm11n.shp ~/Downloads/tr06_d00_shp/tr06_d00.shp
-# rm -fr ~/Downloads/tr06_d00_shp
-shp2pgsql -s 26911 -I $GIS_DIR/LosAngeles/census_tracts_2000_utm11n.shp public.census2000_tracts | sudo -u postgres psql -h localhost -d $DBNAME
-sudo -u postgres psql -h localhost -d $DBNAME -c "VACUUM ANALYZE census2000_tracts (geom);"
+read -n 1 -p "Insert Shapefiles into spatial database? [Y/n] " cont
+echo ""
+if [ "$cont" = "Y" ]; then
+    # Insert 2000 Census geometries: Downloaded from <https://www.census.gov/geo/maps-data/data/cbf/cbf_tracts.html>
+    # unzip ~/Downloads/tr06_d00_shp.zip -d ~/Downloads
+    # ogr2ogr -f "ESRI Shapefile" -where "COUNTY IN ('037', '059', '065', '071', '111')" -s_srs "EPSG:4269" -t_srs "EPSG:26911" $GIS_DIR/LosAngeles/census_tracts_2000_utm11n.shp ~/Downloads/tr06_d00_shp/tr06_d00.shp
+    # rm -fr ~/Downloads/tr06_d00_shp
+    shp2pgsql -s 26911 -I $GIS_DIR/LosAngeles/census_tracts_2000_utm11n.shp public.census2000_tracts | sudo -u postgres psql -h localhost -d $DBNAME
+    sudo -u postgres psql -h localhost -d $DBNAME -c "VACUUM ANALYZE census2000_tracts (geom);"
 
-# Insert 2010 Census geometries: Downloaded from <https://www.census.gov/geo/maps-data/data/cbf/cbf_tracts.html>
-# unzip ~/Downloads/gz_2010_06_140_00_500k.zip -d ~/Downloads
-# ogr2ogr -f "ESRI Shapefile" -where "COUNTY IN ('037', '059', '065', '071', '111')" -s_srs "EPSG:4269" -t_srs "EPSG:26911" $GIS_DIR/LosAngeles/census_tracts_2010_utm11n.shp ~/Downloads/gz_2010_06_140_00_500k/gz_2010_06_140_00_500k.shp
-# rm -fr ~/Downloads/gz_2010_06_140_00_500k
-shp2pgsql -s 26911 -I $GIS_DIR/LosAngeles/census_tracts_2010_utm11n.shp public.census2010_tracts | sudo -u postgres psql -h localhost -d $DBNAME
-sudo -u postgres psql -h localhost -d $DBNAME -c "VACUUM ANALYZE census2010_tracts (geom);"
+    # Insert 2010 Census geometries: Downloaded from <https://www.census.gov/geo/maps-data/data/cbf/cbf_tracts.html>
+    # unzip ~/Downloads/gz_2010_06_140_00_500k.zip -d ~/Downloads
+    # ogr2ogr -f "ESRI Shapefile" -where "COUNTY IN ('037', '059', '065', '071', '111')" -s_srs "EPSG:4269" -t_srs "EPSG:26911" $GIS_DIR/LosAngeles/census_tracts_2010_utm11n.shp ~/Downloads/gz_2010_06_140_00_500k/gz_2010_06_140_00_500k.shp
+    # rm -fr ~/Downloads/gz_2010_06_140_00_500k
+    shp2pgsql -s 26911 -I $GIS_DIR/LosAngeles/census_tracts_2010_utm11n.shp public.census2010_tracts | sudo -u postgres psql -h localhost -d $DBNAME
+    sudo -u postgres psql -h localhost -d $DBNAME -c "VACUUM ANALYZE census2010_tracts (geom);"
+
+    # Insert Los Angeles-Long Beach CSA boundary
+    shp2pgsql -s 26911 -I $GIS_DIR/LosAngeles/LA_LongBeach_CSA.shp public.boundaries | sudo -u postgres psql -h localhost -d $DBNAME
+fi
 
 read -n 1 -p "Inflate DataQuick data and insert into database? [Y/n] " cont
 echo ""

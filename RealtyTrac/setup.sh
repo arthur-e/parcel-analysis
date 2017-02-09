@@ -1,4 +1,4 @@
-DBNAME=realtytrac
+DBNAME=detroit
 OWNER=arthur
 RT_DATA_DIR=/home/arthur/Downloads/RealtyTrac
 ASSESSOR_DATA_DICT=$RT_DATA_DIR/REALTYTRAC_DLP_3.0_Assessor_NO_Geo_Layout.csv

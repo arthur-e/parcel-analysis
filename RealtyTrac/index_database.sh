@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 # Creates an index on appropriate columns
 
-DBNAME=realtytrac
+DBNAME=detroit
 
 # Indexes columns of transactions table
 # Indexes `sr_property_id`
