@@ -27,6 +27,10 @@ if [ "$cont" = "Y" ]; then
     shp2pgsql -s 26911 -I $GIS_DIR/LosAngeles/census_tracts_2000_utm11n.shp public.census2000_tracts | sudo -u postgres psql -h localhost -d $DBNAME
     sudo -u postgres psql -h localhost -d $DBNAME -c "VACUUM ANALYZE census2000_tracts (geom);"
 
+    # Add FIPS codes for this table
+    sudo -u postgres psql -h localhost -d $DBNAME -c "ALTER TABLE census2000_tracts ADD COLUMN fips varchar(13);"
+    sudo -u postgres psql -h localhost -d $DBNAME -c "UPDATE census2000_tracts SET fips = state || county || tract;"
+
     # Insert 2010 Census geometries: Downloaded from <https://www.census.gov/geo/maps-data/data/cbf/cbf_tracts.html>
     # unzip ~/Downloads/gz_2010_06_140_00_500k.zip -d ~/Downloads
     # ogr2ogr -f "ESRI Shapefile" -where "COUNTY IN ('037', '059', '065', '071', '111')" -s_srs "EPSG:4269" -t_srs "EPSG:26911" $GIS_DIR/LosAngeles/census_tracts_2010_utm11n.shp ~/Downloads/gz_2010_06_140_00_500k/gz_2010_06_140_00_500k.shp
