@@ -2,7 +2,7 @@ DBNAME=los_angeles
 OWNER=arthur
 DQ_DATA_DIR=/home/arthur/Downloads/DataQuick_LosAngeles
 BASE_DIR=/usr/local/dev/parcel-analysis # The location of the repository
-GIS_DIR=/home/arthur/Workspace/Dissertation/GIS_data/shp
+GIS_DIR=/home/arthur/Workspace/Speed-of-Change/GIS_data/shp
 ASSESSOR_DATA_DICT=$DQ_DATA_DIR/20121127_UNIVMI_ASSESSOR_LAYOUT.csv
 RECORDER_DATA_DICT=$DQ_DATA_DIR/20121127_UNIVMI_HISTORY_LAYOUT.csv
 
@@ -21,15 +21,19 @@ read -n 1 -p "Insert Shapefiles into spatial database? [Y/n] " cont
 echo ""
 if [ "$cont" = "Y" ]; then
     # Insert 2000 Census geometries: Downloaded from <https://www.census.gov/geo/maps-data/data/cbf/cbf_tracts.html>
-    # unzip ~/Downloads/tr06_d00_shp.zip -d ~/Downloads
-    # ogr2ogr -f "ESRI Shapefile" -where "COUNTY IN ('037', '059', '065', '071', '111')" -s_srs "EPSG:4269" -t_srs "EPSG:26911" $GIS_DIR/LosAngeles/census_tracts_2000_utm11n.shp ~/Downloads/tr06_d00_shp/tr06_d00.shp
-    # rm -fr ~/Downloads/tr06_d00_shp
-    shp2pgsql -s 26911 -I $GIS_DIR/LosAngeles/census_tracts_2000_utm11n.shp public.census2000_tracts | sudo -u postgres psql -h localhost -d $DBNAME
+    shp2pgsql -s 26911 -I $GIS_DIR/LA_County_census_tracts_2000_utm11n.shp public.census2000_tracts | sudo -u postgres psql -h localhost -d $DBNAME
     sudo -u postgres psql -h localhost -d $DBNAME -c "VACUUM ANALYZE census2000_tracts (geom);"
 
     # Add FIPS codes for this table
     sudo -u postgres psql -h localhost -d $DBNAME -c "ALTER TABLE census2000_tracts ADD COLUMN fips varchar(13);"
     sudo -u postgres psql -h localhost -d $DBNAME -c "UPDATE census2000_tracts SET fips = state || county || tract;"
+
+    # Insert 1990 Census geometries
+    shp2pgsql -s 26911 -I $GIS_DIR/LA_County_census_tracts_1990_utm11n.shp public.census1990_tracts | sudo -u postgres psql -h localhost -d $DBNAME
+
+    # Add FIPS codes for this table
+    sudo -u postgres psql -h localhost -d $DBNAME -c "ALTER TABLE census1990_tracts ADD COLUMN fips varchar(13);"
+    sudo -u postgres psql -h localhost -d $DBNAME -c "UPDATE census1990_tracts SET fips = st || co || tract_name;"
 
     # Insert 2010 Census geometries: Downloaded from <https://www.census.gov/geo/maps-data/data/cbf/cbf_tracts.html>
     # unzip ~/Downloads/gz_2010_06_140_00_500k.zip -d ~/Downloads
