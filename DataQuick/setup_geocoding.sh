@@ -16,6 +16,8 @@ if [ "$cont" = "Y" ]; then
 
     echo "Converting from fixed width to CSV..."
     # Also filters to Los Angeles bounding box
+    # General form of spatial filter... ($2 > X_MIN && $2 < X_MAX && $3 > Y_MIN && $3 < Y_MAX)
+    # ...Where negative coords are first converted to positive values (because of DataQuick's stupid index)
     sh convert_fixed_width_to_csv.sh $GEOCODE_DATA_DICT 6 "," $DQ_DATA_DIR/GEO_INDEX_1.TXT | gawk -F "\"*,\"*" '{ if ($2 > 114 && $2 < 119.6 && $3 > 33.3 && $3 < 35.9) print }' - > $DQ_DATA_DIR/GEO_INDEX_1_filtered.csv
 
     echo "Inserting data into database table(s)..."
