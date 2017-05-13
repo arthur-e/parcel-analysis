@@ -42,6 +42,10 @@ if [ "$cont" = "Y" ]; then
     shp2pgsql -s 26911 -I $GIS_DIR/LosAngeles/census_tracts_2010_utm11n.shp public.census2010_tracts | sudo -u postgres psql -h localhost -d $DBNAME
     sudo -u postgres psql -h localhost -d $DBNAME -c "VACUUM ANALYZE census2010_tracts (geom);"
 
+    # Add FIPS codes for this table
+    sudo -u postgres psql -h localhost -d $DBNAME -c "ALTER TABLE census2010_tracts ADD COLUMN fips varchar(13);"
+    sudo -u postgres psql -h localhost -d $DBNAME -c "UPDATE census2010_tracts SET fips = state || county || tract;"
+
     # Insert Los Angeles-Long Beach CSA boundary
     shp2pgsql -s 26911 -I $GIS_DIR/LosAngeles/LA_LongBeach_CSA.shp public.boundaries | sudo -u postgres psql -h localhost -d $DBNAME
 fi
