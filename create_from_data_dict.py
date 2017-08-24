@@ -8,12 +8,14 @@ CREATE TABLE distributors (
 );
 
 Called as:
-$ python create_from_data_dict.py tablename data_dict.csv primary_key_fieldname
+$ python create_from_data_dict.py <tablename> <data_dict.csv> <primary_key_fieldname> <padding>
 '''
 
 import csv
 import sys
 
+NAME_FIELD_IDX = 1 # Column index for field name
+DB_TYPE_FIELD_IDX = 3 # Column index for field type
 PRECISION_FIELD_IDX = 4 # Column index of the precision field
 
 def main(path, pk_field):
@@ -31,7 +33,7 @@ def main(path, pk_field):
                 continue
 
             # Some field records are duplicated by SQL Server; skip these
-            if row[1].lower() in traversed_fields:
+            if row[NAME_FIELD_IDX].lower() in traversed_fields:
                 continue
 
             # If the Precision field is empty, this is a "FILLER" field
@@ -39,42 +41,43 @@ def main(path, pk_field):
                 continue
 
             # Null values allowed?
-            if row[header.index('Empty Values')] == 'Yes':
-                nullable = 'NULL'
+            if 'Emtpy Values' in header:
+                if row[header.index('Empty Values')] == 'Yes':
+                    nullable = 'NULL'
 
             # The "filler" field is always allowed to be null
-            if row[1].lower() == 'filler':
+            if row[NAME_FIELD_IDX].lower() == 'filler':
                 nullable = 'NULL'
 
             # Concatenate the "Field Information" and "ANSI Data Type" and "Precision"
-            if row[2].strip() in ('character', 'character varying'):
-                inp = '  %s%s(%d) %s,' % (row[1].lower().ljust(padding),
-                    row[2].strip(), int(row[4]), nullable)
+            if row[DB_TYPE_FIELD_IDX].strip() in ('character', 'character varying', 'varchar'):
+                inp = '  %s%s(%s) %s,' % (row[NAME_FIELD_IDX].lower().ljust(padding),
+                    row[DB_TYPE_FIELD_IDX].strip(), row[4], nullable)
 
             # Fields for a dollar amount ("AMT") or a principal are specified as integer type but should not be
-            elif row[1].find('_AMT') > 0 or row[1].find('AMOUNT') > 0 or row[1].find('_PRINCIPAL') > 0:
-                inp = '  %s%s %s,' % (row[1].lower().ljust(padding), 'numeric',
-                    nullable)
+            elif row[NAME_FIELD_IDX].find('_AMT') > 0 or row[NAME_FIELD_IDX].find('AMOUNT') > 0 or row[NAME_FIELD_IDX].find('_PRINCIPAL') > 0:
+                    inp = '  %s%s %s,' % (row[NAME_FIELD_IDX].lower().ljust(padding),
+                        'numeric', nullable)
 
             # No ANSI equivalent for this SQL Server data type
-            elif row[2].strip().lower() == 'no equivalent':
+            elif row[DB_TYPE_FIELD_IDX].strip().lower() == 'no equivalent':
                 # TODO Create a field data type whitelist and map non-standard types
                 # Use the "SQL Server Data Type" instead
                 if row[3].strip() == 'tinyint':
-                    inp = '  %s%s %s,' % (row[1].lower().ljust(padding),
+                    inp = '  %s%s %s,' % (row[NAME_FIELD_IDX].lower().ljust(padding),
                         'smallint', nullable)
 
                 else:
-                    inp = '  %s%s %s,' % (row[1].lower().ljust(padding),
+                    inp = '  %s%s %s,' % (row[NAME_FIELD_IDX].lower().ljust(padding),
                         row[3].strip(), nullable)
 
             else:
-                inp = '  %s%s %s,' % (row[1].lower().ljust(padding),
-                    row[2].strip(), nullable)
+                inp = '  %s%s %s,' % (row[NAME_FIELD_IDX].lower().ljust(padding),
+                    row[DB_TYPE_FIELD_IDX].strip(), nullable)
 
             # Add the field descriptor string to our script
             script.append(inp)
-            traversed_fields.append(row[1].lower())
+            traversed_fields.append(row[NAME_FIELD_IDX].lower())
 
     if len(sys.argv) > 3:
         script.append('  PRIMARY KEY(%s)' % pk_field)

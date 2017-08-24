@@ -28,8 +28,19 @@ sudo apt-get install gawk
 
 **You can quickly get up-and-running with the script `setup.sh` after setting the variables defined within.**
 
-Issues with RealtyTrac Metadata
-===============================
+Data Issues
+===========
+
+DataQuick
+---------
+
+The layout file for the Tax Assessor data ("Tax_Layout_w_Property_Level_lat_long_w_code_01262017.xlsx") has a few problems:
+
+- It specifies a `centroid_code` field that does not exist in the data. This field should NOT be created in the database or all the columns after this column index will be shifted one to the right.
+- It does NOT specify the `owner_full_name` field, which is clearly evident in the data. This field should be added to the layout file and a column created in the database.
+
+RealtyTrac
+----------
 
 In the metadata/ layout files provided there were some elements that simply weren't true (or couldn't be true):
 
@@ -37,10 +48,7 @@ In the metadata/ layout files provided there were some elements that simply were
 * The `sr_unique_id` field is **not** unique in the Assessor data and therefore cannot be used as a primary key.
 * In the Foreclosure layout file, after converting it to a CSV, I changed the "Empty Value" field for multiple fields from "No" to "Yes" because, in fact, there are NULL values in the `trustee_unit_nbr` and `fd_beneficiary_unit_nbr` and `parcel_nbr_raw` fields.
 
-Primary Keys
-------------
-
-It's not clear what RealtyTrac intended, but here are some possible primary keys (unique for every record):
+**Primary Keys:** It's not clear what RealtyTrac intended, but here are some possible primary keys (unique for every record):
 
     Assessor data:
         sa_property_id ("Unique primary key identifier assigned to a property")
