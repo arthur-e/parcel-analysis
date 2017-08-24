@@ -26,7 +26,7 @@ On Debian systems (including the Ubuntu distributions) it is likely not availabl
 sudo apt-get install gawk
 ```
 
-**You can quickly get up-and-running with the script `setup.sh` after setting the variables defined within.**
+`dos2unix` may also be required if you are using a non-Windows computer. I discovered Windows-style line endings in the CoreLogic data, for instance.
 
 Data Issues
 ===========
@@ -36,8 +36,15 @@ DataQuick
 
 The layout file for the Tax Assessor data ("Tax_Layout_w_Property_Level_lat_long_w_code_01262017.xlsx") has a few problems:
 
+- It's not clear what the primary key should be. `map_reference_1` is described as "A CoreLogic unique key to link record to the CoreLogic CD Map product" but the field is empty for some rows.
 - It specifies a `centroid_code` field that does not exist in the data. This field should NOT be created in the database or all the columns after this column index will be shifted one to the right.
 - It does NOT specify the `owner_full_name` field, which is clearly evident in the data. This field should be added to the layout file and a column created in the database.
+- The `assessed_year` column is supposed to be a 4-digit year ("YYYY" format or, e.g., "2016"); however, it contains strings like "20160000"--that is, with 4 trailing zeros. This needs to be fixed in the layout file and the database column for `assessed_year` needs to allow 8 digits.
+- The columns `front_footage`, `depth_footage`, `living_square_feet`, `ground_floor_square_feet`, `basement_square_feet`, `garage_parking_square_feet`, `total_baths`, and `sale_price` are all described as integer columns in the layout file but they all contain decimal numbers.
+- The columns `OWNER_1_LAST_NAME`, `OWNER_1_FIRST_NAME_MI`, `OWNER_2_LAST_NAME`, `OWNER_2_FIRST_NAME_MI`, `SUBDIVISION_NAME` may be too short. At least the first one, which has a specified width of 30 characters, exceeded that limit on Line 16. I defined all these columns to have 255-byte lengths (the maximum for `varchar` type).
+- Columns `mail_unit_number` and `zoning` also have incorrect widths. I upgraded these to 255 characters after running into too many edge cases (e.g., "313MAILBOX").
+
+(By the way, most of these issues were discovered on Line 1 of the file! They are not rare!)
 
 RealtyTrac
 ----------

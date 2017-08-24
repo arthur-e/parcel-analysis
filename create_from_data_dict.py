@@ -18,7 +18,7 @@ NAME_FIELD_IDX = 1 # Column index for field name
 DB_TYPE_FIELD_IDX = 3 # Column index for field type
 PRECISION_FIELD_IDX = 4 # Column index of the precision field
 
-def main(path, pk_field):
+def main(path, pk_field=None):
     with open(path, 'r') as data_dict:
         reader = csv.reader(data_dict)
         for l, row in enumerate(reader):
@@ -41,7 +41,7 @@ def main(path, pk_field):
                 continue
 
             # Null values allowed?
-            if 'Emtpy Values' in header:
+            if 'Empty Values' in header:
                 if row[header.index('Empty Values')] == 'Yes':
                     nullable = 'NULL'
 
@@ -91,10 +91,10 @@ def main(path, pk_field):
 
 if __name__ == '__main__':
     script = ['CREATE TABLE %s (' % sys.argv[1]]
-    padding = int(sys.argv[4]) if len(sys.argv) > 4 else 30
+    padding = int(sys.argv[4]) if len(sys.argv) > 4 else 35
     traversed_fields = []
 
     # Unpack arguments
-    script = main(*sys.argv[2:4])
+    script = main(*sys.argv[2:4]) if len(sys.argv) > 3 else main(sys.argv[2])
     script.append(');\n')
     sys.stdout.write('\n'.join(script))
