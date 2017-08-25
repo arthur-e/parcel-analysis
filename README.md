@@ -34,7 +34,9 @@ Data Issues
 DataQuick
 ---------
 
-The layout file for the Tax Assessor data ("Tax_Layout_w_Property_Level_lat_long_w_code_01262017.xlsx") has a few problems:
+One significant issue with the DataQuick exports is that they have backslashes; these often occur right before the text delimiter.
+
+**The layout file for the Tax Assessor data** ("Tax_Layout_w_Property_Level_lat_long_w_code_01262017.xlsx") **has a few problems:**
 
 - It's not clear what the primary key should be. `map_reference_1` is described as "A CoreLogic unique key to link record to the CoreLogic CD Map product" but the field is empty for some rows.
 - It specifies a `centroid_code` field that does not exist in the data. This field should NOT be created in the database or all the columns after this column index will be shifted one to the right.
@@ -45,6 +47,10 @@ The layout file for the Tax Assessor data ("Tax_Layout_w_Property_Level_lat_long
 - Columns `mail_unit_number` and `zoning` also have incorrect widths. I upgraded these to 255 characters after running into too many edge cases (e.g., "313MAILBOX").
 
 (By the way, most of these issues were discovered on Line 1 of the file! They are not rare!)
+
+**The layout file for the Deed data** ("Deed_Layout_PropertyLevel_Lat_Long_11172016.xlsx") **has a few problems:**
+
+- The fields `pcl_id_iris_frmtd`, `situs_carrier_code`, `deed_sec_cat_codes_2x10`, `mtg_sec_cat_codes_1x10`, `mailing_carrier_code`, 'transaction_type', `mailing_house_number` are listed as integer fields but contain character data.
 
 RealtyTrac
 ----------
