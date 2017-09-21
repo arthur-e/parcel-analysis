@@ -48,6 +48,31 @@ unzip -c Michigan_Uni_Tax_AKZA_85HRQ5.zip | awk -F "|" '{ if ($31 >= 42 && $31 <
 The deed sales data can be filtered the same way as the Tax Assessor data.
 Column 1 is the county-level FIPS code.
 
+### Notes on Fields
+
+The following is a description of the apparent usefulness of a few fields, based on my assessment of their coverage for the Detroit metropolitan area (which may not be representative of other study areas):
+
+Field Name                   | Useful? | Notes
+-----------------------------|---------|----------------------------------------------------------------
+`corporate_indicator`        |   Maybe | Has a "Y" (Yes?) for 1.4 million records but the rest are blank
+`absentee_owner_status`      |      No | Blank for all records in Detroit metro area
+`sale_code`                  |      No | Blank for all except 47 records in Detroit metro area
+`document_type`              |     Yes | Rich number of codes that are populated
+`transaction_type`           |     Yes | Rich number of codes that are populated
+`mortgage_loan_type_code`    |     Yes | Rich number of codes that are populated
+`mortgage_deed_type`         |     Yes | Rich number of codes that are populated
+`land_use`                   |   Maybe | Rich number of codes are populated; 100,000+ are blank
+`property_indicator`         |   Mabye | Rich number of codes, but 227,000+ rows are blank
+`inter_family`               |     Yes | True or False for all records; totals are credible
+`resale_or_new_construction` |     Yes | "M" or "N" for almost all records
+`foreclosure`                |   Maybe | 565,445 records are "Y" and the rest are blank
+`cash_or_mortgage_purchase`  |   Maybe | "Q" or "R" for many records but over 2 million are blank
+`equity_flag`                |   Maybe | "Y" for a few records but the vast majority are blank
+`refi_flag`                  |      No | "Y" for only a few records and the rest are blank
+`residential_model_indicator`|   Maybe | "Y" for most records but the rest are blank
+
+Note that while ~565,000 Deed records are marked "Y" (Yes) in the `foreclosure` field, there are over 784,000 Foreclosure records in the Detroit metro area.
+
 ## Foreclosures
 
 The foreclosure data are formatted a little differently; the county-level FIPS code is in column 2 (`$2` in `awk`), therefore any `awk` query should look like:
