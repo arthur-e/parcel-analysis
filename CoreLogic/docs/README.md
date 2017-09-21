@@ -23,7 +23,7 @@ Then, you can filter the FIPS code field (1st column of the text file) for entri
 
 ```sh
 # Example: For Los Angeles or Orange counties
-unzip -c Michigan_Uni_Tax_AKZA_85HRQ5.zip | awk -F "|" '{ if ($1 == 06037 || $1 == 06059) print }' Michigan_Uni_Tax_AKZA_85HRQ5.txt > filtered_sample.txt
+unzip -c Michigan_Uni_Tax_AKZA_85HRQ5.zip | awk -F "|" '{ if ($1 == 06037 || $1 == 06059) print }' > filtered_sample.txt
 ```
 
 #### By Bounding Box
@@ -40,7 +40,21 @@ In this example, the bounding box from QGIS shows `-83.84,42.00 : -82.53,42.92`,
 
 ```sh
 # Extract those records located in the Detroit metro area:
-unzip -c Michigan_Uni_Tax_AKZA_85HRQ5.zip | awk -F "|" '{ if ($31 >= 42 && $31 <= 42.92 && $32 >= -83.84 && $32 <= -82.53) print }' Michigan_Uni_Tax_AKZA_85HRQ5.txt > filtered_sample.txt
+unzip -c Michigan_Uni_Tax_AKZA_85HRQ5.zip | awk -F "|" '{ if ($31 >= 42 && $31 <= 42.92 && $32 >= -83.84 && $32 <= -82.53) print }' > filtered_sample.txt
+```
+
+## Deed Sales
+
+The deed sales data can be filtered the same way as the Tax Assessor data.
+Column 1 is the county-level FIPS code.
+
+## Foreclosures
+
+The foreclosure data are formatted a little differently; the county-level FIPS code is in column 2 (`$2` in `awk`), therefore any `awk` query should look like:
+
+```sh
+# Example: For Los Angeles or Orange counties
+unzip -c Michigan_Uni_FCL_AKZA_85HRYY.zip | awk -F "|" '{ if ($2 == 06037 || $2 == 06059) print }' > filtered_sample.txt
 ```
 
 # Using a Relational Database

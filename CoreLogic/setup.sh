@@ -6,8 +6,9 @@ DBNAME=corelogic
 OWNER=arthur
 DQ_DATA_DIR=/home/arthur/Downloads/CoreLogic
 BASE_DIR=/usr/local/dev/parcel-analysis # The location of the repository
-ASSESSOR_DATA_DICT=$DQ_DATA_DIR/layouts/Tax_Layout_w_Property_Level_lat_long_w_code_01262017.csv
-RECORDER_DATA_DICT=$DQ_DATA_DIR/layouts/Deed_Layout_PropertyLevel_Lat_Long_11172016.csv
+ASSESSOR_DATA_DICT=~/Workspace/Dissertation/Parcel_Data/CoreLogic/Tax_Layout_w_Property_Level_lat_long_w_code_01262017.csv
+RECORDER_DATA_DICT=~/Workspace/Dissertation/Parcel_Data/CoreLogic/Deed_Layout_PropertyLevel_Lat_Long_11172016.csv
+FORECLOSURE_DATA_DICT=~/Workspace/Dissertation/Parcel_Data/CoreLogic/FCL_Layout_Bulk_w_Code_Tables_04072017.csv
 SCHEMA="los_angeles."
 
 # Create the database
