@@ -1,4 +1,4 @@
-﻿SELECT tr.pcl_id_iris_frmtd,
+﻿SELECT tr.fips, tr.pcl_id_iris_frmtd,
        ST_Transform(
          ST_SetSRID(
            ST_MakePoint(tr.property_level_longitude, tr.property_level_latitude),

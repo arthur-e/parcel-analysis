@@ -79,7 +79,7 @@ def main(path, pk_field=None):
             script.append(inp)
             traversed_fields.append(row[NAME_FIELD_IDX].lower())
 
-    if len(sys.argv) > 3:
+    if len(sys.argv) > 3 and pk_field is not None:
         script.append('  PRIMARY KEY(%s)' % pk_field)
 
     else:
@@ -91,7 +91,7 @@ def main(path, pk_field=None):
 
 if __name__ == '__main__':
     script = ['CREATE TABLE %s (' % sys.argv[1]]
-    padding = int(sys.argv[4]) if len(sys.argv) > 4 else 35
+    padding = int(sys.argv[4]) if len(sys.argv) > 4 else 50
     traversed_fields = []
 
     # Unpack arguments
