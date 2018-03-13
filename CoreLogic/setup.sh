@@ -1,6 +1,7 @@
 #!/bin/bash
 
-# Creates and populates the PostgreSQL database.
+# Creates and populates the PostgreSQL database. Prior to running:
+#   1. Files "Transactions.txt", "TaxAssessor.txt" are on the Desktop
 
 DBNAME=corelogic
 OWNER=arthur
@@ -10,7 +11,7 @@ BASE_DIR=/usr/local/dev/parcel-analysis # The location of the repository
 ASSESSOR_DATA_DICT=~/Workspace/Dissertation/Parcel_Data/CoreLogic/Tax_Layout_w_Property_Level_lat_long_w_code_01262017.csv
 RECORDER_DATA_DICT=~/Workspace/Dissertation/Parcel_Data/CoreLogic/Deed_Layout_PropertyLevel_Lat_Long_11172016.csv
 FORECLOSURE_DATA_DICT=~/Workspace/Dissertation/Parcel_Data/CoreLogic/FCL_Layout_Bulk_w_Code_Tables_04072017.csv
-SCHEMA="detroit."
+SCHEMA="los_angeles."
 
 # Create the database
 # . create_db.sh $DBNAME $OWNER

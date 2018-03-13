@@ -4,6 +4,7 @@
            ST_MakePoint(tr.property_level_longitude, tr.property_level_latitude),
            4326), 
          32617) AS geom,
+       tr.foreclosure,
        tr.recording_date,
        left(tr.recording_date::text, 4) AS recording_year, 
        right(left(tr.recording_date::text, 6), 2) AS recording_month,

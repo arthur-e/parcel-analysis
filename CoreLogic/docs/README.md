@@ -48,6 +48,16 @@ unzip -c Michigan_Uni_Tax_AKZA_85HRQ5.zip | awk -F "|" '{ if ($31 >= 42 && $31 <
 The deed sales data can be filtered the same way as the Tax Assessor data.
 Column 1 is the county-level FIPS code.
 
+**For bounding box queries, however, the fields are different than in the Tax Assessor example.**
+
+- Latitude: field 18 (`PROPERTY LEVEL LATITUDE`);
+- Longitude: field 19 (`PROPERTY LEVEL LONGITUDE`);
+
+```sh
+# Extract those records located in the Detroit metro area:
+unzip -c Michigan_Uni_Deed_KZA_85HRZB.zip | awk -F "|" '{ if ($18 >= 42 && $18 <= 42.92 && $19 >= -83.84 && $19 <= -82.53) print }' > filtered_sample.txt
+```
+
 ### Notes on Fields
 
 The following is a description of the apparent usefulness of a few fields, based on my assessment of their coverage for the Detroit metropolitan area (which may not be representative of other study areas):
@@ -92,9 +102,14 @@ This information is contained in one of the layout files:
 - Tax Assessor layout file: `Tax_Layout_w_Property_Level_lat_long_w_code_01262017.xlsx`
 - Deed layout file: `Deed_Layout_PropertyLevel_Lat_Long_11172016.xlsx`
 
+## Troubleshooting
+
 The layout files are not perfect.
 **Because the individual Tax Assessor, Deed, and Foreclosure records have human data-entry errors, there may be a value in a particular field in your data that does not correspond to the data type specified in the layout file.**
 You may find you need to change the data type for a field from a numeric (integer, floating point) type to a character string type because some odd alphabetical characters found their way into a given field.
+
+### Wrong Data Type in a Field
+
 Here's an example error message from PostgreSQL, which is trying to store a "number" in a field that has an integer type.
 
 ```
@@ -107,6 +122,8 @@ We can see a valid ZIP code (6051140) here, but there is an odd 9 and a space be
 It's not reasonable to try and change the data, so let's change our database to accomodate this oddity.
 Simply re-create the table, making `mailing_property_address_zip_code` a character (e.g., `varchar`) field instead of an integer field.
 
+### Wrong Field Width or Precision
+
 Field length is another issue that crops up.
 The layout file has a number of recommended field widths for the database but the data often exceed them.
 For instance, `owner_1_last_name` in the Tax Assessor data has a field width of only 30 characters but some of the values in this field are more than 30 characters long.
@@ -117,3 +134,32 @@ Having constraints on the data type and length can help you fix some really hard
 This is extremely hard to detect and fix; the error that results is a general one--basically, there appear to be more columns in the data than your table has defined.
 If you remove one pipe/ column from the end of the problematic line, you might get a more familiar error message related to trying to stuff the wrong value into the wrong column; and this error will crop up right next to the column that contains the delimiter character!
 So, that's just one example why having constraints on column types can be helpful.
+
+### Extra Data after Last Expected Column
+
+Here's another annoying bug that can come up: there are more fields on a line of the delimited text file than there are columns defined on the table.
+
+```
+ERROR:  extra data after last expected column
+```
+
+This will occur when there is an extra field delimiter on a row.
+If there are N columns defined in a table, the database throws an error if it finds more than N-1 delimiters in a row of the text file.
+An extra delimiter can end up on a line if the text data, prior to serialization in the delimited file, contained the delimiter character already (e.g., without quoted fields, pipe-delimited data that originally contained a literal pipe character).
+
+To figure out which line of the file has too many delimiters, you can try counting the occurrence of delimiters on each line.
+The example below shows how to do with the shell when the delimiter is a pipe character ("|"); replace that part of the `grep` program's call, below, with the correct delimiter for your data.
+
+```sh
+cat myfile.txt | grep -n -o "|" | sort -n | uniq -c | cut -d : -f 1
+```
+
+**But which delimiter to remove?** Well, first, try removing the very last delimiter (the trailing delimiter).
+This will usually not fix the problem (because the extra delimiter is actually somewhere in the middle of the line) but it will help you find where the extra delimiter is because a new error message will be thrown related to that new field, e.g.,
+
+```sh
+ERROR:  invalid input syntax for type numeric: "F"
+CONTEXT:  COPY transactions, line 1, column sale_amount: "F"
+```
+
+In the example above, we now know that the extra delimiter is somewhere near the `sale_amount` field.
