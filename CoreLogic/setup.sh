@@ -5,6 +5,7 @@
 
 DBNAME=corelogic
 OWNER=arthur
+SOURCE_DIR=/usr/local/dev/parcel-analysis/
 DQ_DATA_DIR=/home/arthur/Desktop
 GIS_DATA_DIR=~/Workspace/Dissertation/GIS_data/
 BASE_DIR=/usr/local/dev/parcel-analysis # The location of the repository
@@ -33,7 +34,7 @@ echo ""
 if [ "$cont" = "Y" ]; then
     # Create the assessment (Assessor Record) table
     psql -d $DBNAME -c "DROP TABLE ${SCHEMA}assessments;"
-    python create_from_data_dict.py "${SCHEMA}assessments" $ASSESSOR_DATA_DICT | psql -d $DBNAME -f -
+    python $SOURCE_DIR/create_from_data_dict.py "${SCHEMA}assessments" $ASSESSOR_DATA_DICT | psql -d $DBNAME -f -
 
     for file in $(ls $DQ_DATA_DIR/TaxAssessor*.txt)
     do
@@ -57,7 +58,7 @@ echo ""
 if [ "$cont" = "Y" ]; then
     # Create the record (Recorder) table
     psql -d $DBNAME -c "DROP TABLE ${SCHEMA}transactions;"
-    python create_from_data_dict.py "${SCHEMA}transactions" $RECORDER_DATA_DICT | psql -d $DBNAME -f -
+    python $SOURCE_DIR/create_from_data_dict.py "${SCHEMA}transactions" $RECORDER_DATA_DICT | psql -d $DBNAME -f -
 
     for file in $(ls $DQ_DATA_DIR/Transactions*.txt)
     do
@@ -78,7 +79,7 @@ echo ""
 if [ "$cont" = "Y" ]; then
     # Create the record (Recorder) table
     psql -d $DBNAME -c "DROP TABLE ${SCHEMA}foreclosures;"
-    python create_from_data_dict.py "${SCHEMA}foreclosures" $FORECLOSURE_DATA_DICT | psql -d $DBNAME -f -
+    python $SOURCE_DIR/create_from_data_dict.py "${SCHEMA}foreclosures" $FORECLOSURE_DATA_DICT | psql -d $DBNAME -f -
 
     for file in $(ls $DQ_DATA_DIR/Foreclosures*.txt)
     do

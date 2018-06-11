@@ -3,7 +3,7 @@
          ST_SetSRID(
            ST_MakePoint(tr.property_level_longitude, tr.property_level_latitude),
            4326), 
-         32617) AS geom,
+         26911) AS geom, -- UTM Zone 11N, NAD83 (Los Angeles)
        tr.foreclosure,
        tr.recording_date,
        left(tr.recording_date::text, 4) AS recording_year, 
@@ -19,11 +19,11 @@
        tr.mortgage_loan_type_code, tr.mortgage_deed_type,
        tr.property_indicator, tr.inter_family, tr.resale_or_new_construction,
        tr.cash_or_mortgage_purchase, tr.equity_flag
-  INTO detroit.transactions_residential_adjusted
-  FROM detroit.transactions tr
+  INTO los_angeles.transactions_residential_adjusted
+  FROM los_angeles.transactions tr
   LEFT JOIN public.cpi_u_housing_2010 cpi ON left(tr.recording_date::text, 4) = cpi.year::text
        -- For known residential properties (by use code)
  WHERE tr.property_indicator IN ('10', '11', '21')
        -- And for unknown types, "Miscellaneous" or blank, that are likely to be residential
     OR (tr.residential_model_indicator = 'Y' 
-        AND (tr.property_indicator IN ('00', '') OR tr.property_indicator IS NULL));
+        AND (tr.property_indicator IN ('0', '00', '') OR tr.property_indicator IS NULL));

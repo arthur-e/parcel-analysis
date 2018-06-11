@@ -45,10 +45,14 @@ unzip -c Michigan_Uni_Tax_AKZA_85HRQ5.zip | awk -F "|" '{ if ($31 >= 42 && $31 <
 
 ## Deed Sales
 
-The deed sales data can be filtered the same way as the Tax Assessor data.
-Column 1 is the county-level FIPS code.
+The deed sales data can be filtered the same way as the Tax Assessor data (column 1 is the county-level FIPS code), **however, the county FIPS code is formatted as a number without a leading zero, so the `awk` filter must be updated accordingly.**
 
-**For bounding box queries, however, the fields are different than in the Tax Assessor example.**
+```sh
+# Example: For Los Angeles or Orange counties
+unzip -c Michigan_Uni_Tax_AKZA_85HRQ5.zip | awk -F "|" '{ if ($1 == 6037 || $1 == 6059) print }' > filtered_sample.txt
+```
+
+**For bounding box queries, the fields are different than in the Tax Assessor example.**
 
 - Latitude: field 18 (`PROPERTY LEVEL LATITUDE`);
 - Longitude: field 19 (`PROPERTY LEVEL LONGITUDE`);
