@@ -21,9 +21,14 @@ A private company, Scientific Telephone Samples, maintains [a list of all U.S. c
 [There's also a list available from the Bureau of Economic Analysis](https://www.bea.gov/regional/docs/msalist.cfm) (FIPS codes are in the third column of this spreadsheet).
 Then, you can filter the FIPS code field (1st column of the text file) for entries that match these code(s) you're intersted in.
 
+**Be aware that some counties have FIPS codes that are entered with a leading zero (when applicable), while others don't.!**
+This can occur even within the same state, e.g., California, which has a FIPS state code of "06".
+Los Angeles County, with FIPS county code "06037", is actually recorded as "6037" while Orange County, with FIPS county code "06059", is recorded as "06059".
+It's good practice to check for a code with and without the leading zero:
+
 ```sh
-# Example: For Los Angeles or Orange counties
-unzip -c Michigan_Uni_Tax_AKZA_85HRQ5.zip | awk -F "|" '{ if ($1 == 06037 || $1 == 06059) print }' > filtered_sample.txt
+# Example: For Los Angeles County
+unzip -c Michigan_Uni_Tax_AKZA_85HRQ5.zip | awk -F "|" '{ if ($1 == 06037 || $1 == 6037) print }' > filtered_sample.txt
 ```
 
 #### By Bounding Box
@@ -46,10 +51,11 @@ unzip -c Michigan_Uni_Tax_AKZA_85HRQ5.zip | awk -F "|" '{ if ($31 >= 42 && $31 <
 ## Deed Sales
 
 The deed sales data can be filtered the same way as the Tax Assessor data (column 1 is the county-level FIPS code), **however, the county FIPS code is formatted as a number without a leading zero, so the `awk` filter must be updated accordingly.**
+As with the Tax Assessor data, it's good practice to check for a code with and without the leading zero:
 
 ```sh
-# Example: For Los Angeles or Orange counties
-unzip -c Michigan_Uni_Tax_AKZA_85HRQ5.zip | awk -F "|" '{ if ($1 == 6037 || $1 == 6059) print }' > filtered_sample.txt
+# Example: For Los Angeles county
+unzip -c Michigan_Uni_Tax_AKZA_85HRQ5.zip | awk -F "|" '{ if ($1 == 06037 || $1 == 6037) print }' > filtered_sample.txt
 ```
 
 **For bounding box queries, the fields are different than in the Tax Assessor example.**
